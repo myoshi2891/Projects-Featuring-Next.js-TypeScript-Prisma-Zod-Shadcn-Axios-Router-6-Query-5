@@ -11,3 +11,24 @@ export const socialLinks = [
 	{ id: 3, href: "https://www.instagram.com", icon: "fab fa-instagram" },
 	{ id: 4, href: "https://www.pinterest.com", icon: "fab fa-pinterest" },
 ];
+
+export const services = [
+	{
+		id: 1,
+		icon: "fas fa-wallet fa-fw",
+		title: "saving money",
+		text: "Lorem ipsum dolor sit amet consectetur adipisicingelit. Asperiores, officia.",
+	},
+	{
+		id: 2,
+		icon: "fas fa-tree fa-fw",
+		title: "endless hiking",
+		text: "Lorem ipsum dolor sit amet consectetur adipisicingelit. Asperiores, officia.",
+	},
+	{
+		id: 3,
+		icon: "fas fa-socks fa-fw",
+		title: "amazing comfort",
+		text: "Lorem ipsum dolor sit amet consectetur adipisicingelit. Asperiores, officia.",
+	},
+];
