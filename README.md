@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# React - Advanced Concepts
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React Course
 
-## Available Scripts
+[My React Course](https://www.udemy.com/course/react-tutorial-and-projects-course/?referralCode=FEE6A921AF07E2563CEF)
 
-In the project directory, you can run:
+## Support
 
-### `npm start`
+Find the Content Useful? [You can always buy me a coffee](https://www.buymeacoffee.com/johnsmilga)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Run App
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- if you get an error, run the commands separately
 
-### `npm test`
+```sh
+npm install && npm run dev
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- http://localhost:5173/
 
-### `npm run build`
+Rest of the content in the TUTORIAL.md
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Corresponding/Matching Projects
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### useState
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Birthday Reminder
 
-### `npm run eject`
+#### useEffect and Conditional Rendering
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Tours
+3. Reviews
+4. Accordion
+5. Menu
+6. Tabs
+7. Slider
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Forms
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+8. Lorem Ipsum Generator
+9. Color Shades Generator
+10. Grocery Bud
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### useRef
 
-## Learn More
+11. Navbar
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### useContext
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+12. Modal and Sidebar
+13. Stripe Menus
 
-### Code Splitting
+#### useReducer and useContext
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+14. Cart
 
-### Analyzing the Bundle Size
+#### React Router
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+15. Cocktails
