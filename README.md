@@ -1,39 +1,62 @@
 ## Figma URL
 
-[Tours](https://www.figma.com/file/OnLoM3AzBFaHzSc2iolJS0/Tours?node-id=0%3A1&t=wiRXOlTLN5ehekYI-1)
+[Reviews](https://www.figma.com/file/e8L2QiR4GVTa5cGuRpXtk3/Reviews?node-id=0%3A1&t=gcCYcePiKxnkJ9kH-1)
 
 ## Steps
 
-#### Setup
+#### Explore Data
 
-First create - three components (Tours, Tour, and Loading), you can create three separate files in your project directory: Tours.jsx, Tour.jsx, and Loading.jsx. In each of these files, you will define a React functional component that returns JSX code for rendering the respective component.
+Navigate to data.js and take a look at the data structure
 
-#### Fetch Tours
+#### Import Reviews
 
-The Tours component will be responsible for rendering a list of Tour components. In App.jsx, you will fetch the tours data from a URL using the fetch API. Before the data is loaded, you should show a loading spinner or message, which can be implemented using the Loading component.
+First, import the reviews data into your project. This data should be an array of objects, with each object representing a person's review and containing properties such as name, job, image URL, and text.
 
-#### Render Tours
+#### Setup State Value (Index)
 
-Once the data is loaded, you can set the state of your component to store the tours data. You can then map over the tours array and render a Tour component for each tour. Each Tour component will receive the tour data as props, including the tour's id, image, info, name, and price.
+Then, set up a state value that controls which person from the list is displayed.
 
-#### Remove Tour
+#### React Icons (Optional)
 
-To implement the "remove tour" functionality, you can add a button to each Tour component that, when clicked, removes the tour from the list of tours. You can achieve this by updating the state of the Tours component to remove the tour from the tours array.
+[Docs](https://react-icons.github.io/react-icons/)
 
-#### Read More
+```sh
+npm install react-icons --save
+```
 
-To implement the "read more" functionality, you can add a button to each Tour component that, when clicked, expands the description of the tour. You can achieve this by updating the state of the Tour component to toggle a "read more" flag, and conditionally rendering the full description based on the flag.
+App.jsx
 
-#### Re-fetch Tours
+```js
+import { FaBeer } from 'react-icons/fa';
+const App = () => {
+  return;
+  <div>
+    <h2>Reviews Starter</h2>;
+    <FaBeer className='beer' />
+  </div>;
+};
+```
 
-Finally, you can implement a "re-fetch" functionality by adding a button or other user interface element that, when clicked, re-fetches the tours data from the URL and updates the state of the Tours component. You may also want to add a loading state again during the re-fetching process.
+#### Render First Person
+
+To render the first person in the list, you can access the first item in the reviews array and use its properties to display the person's image (inline styles), name, job, and review text.
+
+#### Prev and Next
+
+To allow the user to cycle through the reviews, you can set up buttons to display the next and previous reviews in the list. You can do this by keeping track of the current index in the reviews array, and updating the index when the user clicks the next or previous button. You can then use the updated index to access the corresponding person's review from the reviews array.
+
+#### Random
+
+To allow the user to display a random person's review, you can set up a button with functionality to randomly select an index in the reviews array. You can then use the selected index to display the corresponding person's review.
+
+#### Extra
+
+The modulus operator in JavaScript is represented by the percent sign (%). It returns the remainder of a division operation between two numbers.
 
 Overall, the flow of the application should look something like this:
 
-- App.jsx fetches tours data from a URL and sets the state of the Tours component to store the data.
-- The Tours component maps over the tours array and renders a Tour component for each tour.
-- Each Tour component has a "remove tour" button and a "read more" button.When the "remove tour" button is clicked, the Tours component updates its state to remove the tour from the tours array.
-
-- When the "read more" button is clicked, the Tour component updates its state to toggle a "read more" flag and conditionally renders the full description.
-
-- When the "re-fetch" button is clicked, the Tours component re-fetches the tours data from the URL and updates its state.
+- Import the reviews data into your project as an array of objects.
+- Set up the reviews data as a state variable using the useState hook.
+- Render the first person's review in the list using their image, name, job, and text properties.
+- Set up buttons to display the next and previous reviews in the list. Keep track of the current index in the reviews array and update it when the user clicks the next or previous button.
+- Set up a button to display a random person's review. This button should select a random index in the reviews array and use it to display the corresponding person's review.
