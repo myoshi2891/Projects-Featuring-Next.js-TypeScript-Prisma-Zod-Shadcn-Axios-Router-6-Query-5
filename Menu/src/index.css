@@ -265,6 +265,7 @@ ul {
   flex-wrap: wrap;
   gap: 1rem;
 }
+
 .section-center {
   width: 90vw;
   margin: 0 auto;
@@ -277,14 +278,17 @@ ul {
   background: var(--white);
   border-radius: var(--borderRadius);
 }
+
 .menu-item .img {
   height: 15rem;
   border-top-right-radius: var(--borderRadius);
   border-top-left-radius: var(--borderRadius);
 }
+
 .item-info {
   padding: 1.5rem;
 }
+
 .item-info header {
   display: flex;
   justify-content: space-between;
@@ -296,6 +300,7 @@ ul {
 .item-info h5 {
   font-weight: 500;
 }
+
 .item-price {
   background: var(--primary-500);
   color: var(--white);
@@ -305,13 +310,14 @@ ul {
 }
 
 .item-text {
-  line-height: 2;
-  color: var(--grey-500);
+   line-height: 2;
+   color: var(--grey-500);
 }
 
 .section-center {
   justify-items: center;
 }
+
 .menu-item {
   max-width: 25rem;
 }
