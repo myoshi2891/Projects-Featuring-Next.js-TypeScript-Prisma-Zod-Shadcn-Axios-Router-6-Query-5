@@ -4,9 +4,20 @@ import { FaQuoteRight } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 function Carousel() {
-	const [people, setPeople] = useState(list);
-	const prevSlide = () => {};
-	const nextSlide = () => {};
+	const [people, setPeople] = useState(longList);
+	const [currentPerson, setCurrentPerson] = useState(1);
+	const prevSlide = () => {
+		setCurrentPerson((oldPerson) => {
+			const result = (oldPerson - 1 + people.length) % people.length;
+			return result;
+		});
+	};
+	const nextSlide = () => {
+		setCurrentPerson((oldPerson) => {
+			const result = (oldPerson + 1) % people.length;
+			return result;
+		});
+	};
 
 	return (
 		<section className="slider-container">
@@ -16,7 +27,16 @@ function Carousel() {
 					<article
 						className="slide"
 						style={{
-							transform: `translateX(${100 * personIndex}%)`,
+							transform: `translateX(${
+								100 * (personIndex - currentPerson)
+							}%)`,
+							opacity: personIndex === currentPerson ? "1" : "0",
+							visibility:
+								personIndex === currentPerson
+									? "visible"
+									: "hidden",
+							transition:
+								"transform 0.6s ease-in-out, opacity 0.6s ease-in-out",
 						}}
 						key={id}
 					>
