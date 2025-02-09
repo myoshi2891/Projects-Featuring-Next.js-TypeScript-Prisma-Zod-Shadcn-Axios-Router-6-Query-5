@@ -351,3 +351,23 @@ ul {
 .next-slide {
   transform: translateX(100%);
 }
+
+.slick-container {
+  margin: 0 auto;
+  margin-top: 10rem;
+  width: 80vw;
+  max-width: 800px;
+  text-align: center;
+}
+
+.slick-slide img {
+  display: inline-block;
+}
+
+.slick-prev::before {
+  color: var(--primary-500) !important;
+}
+
+.slick-next::before {
+  color: var(--primary-500) !important;
+}
