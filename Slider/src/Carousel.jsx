@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { shortList, list, longList } from "./data";
 import { FaQuoteRight } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -18,6 +18,16 @@ function Carousel() {
 			return result;
 		});
 	};
+
+	useEffect(() => {
+		let sliderId = setInterval(() => {
+			nextSlide();
+		}, 2000);
+
+		return () => {
+			clearInterval(sliderId);
+		};
+	}, [currentPerson]);
 
 	return (
 		<section className="slider-container">
