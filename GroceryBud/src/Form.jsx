@@ -1,11 +1,14 @@
 import { useState } from "react";
 
-function Form() {
+function Form({ addItem }) {
     const [newItemName, setNewItemName] = useState("");
-    const handleSubmit = (e) => { 
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setNewItemName("");  // clear input field after submitting
-    }
+        if (!newItemName) return;
+        addItem(newItemName);
+        setNewItemName(""); // clear input field after submitting
+    };
     return (
         <form onSubmit={handleSubmit}>
             <h4>grocery bud</h4>
@@ -16,7 +19,9 @@ function Form() {
                     value={newItemName}
                     onChange={(event) => setNewItemName(event.target.value)}
                 />
-                <button type="submit" className="btn">add item</button>
+                <button type="submit" className="btn">
+                    add item
+                </button>
             </div>
         </form>
     );
