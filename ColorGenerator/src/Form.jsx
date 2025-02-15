@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 function Form() {
     const [color, setColor] = useState("");
     const handleSubmit = (e) => {
