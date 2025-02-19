@@ -6,7 +6,7 @@ import logo from "./logo.svg";
 function Sidebar() {
     const { isSidebarOpen, closeSidebar } = useGlobalContext();
     return (
-        <aside className="sidebar">
+        <aside className={`sidebar ${isSidebarOpen ? "show-sidebar" : ""}`}>
             <div className="sidebar-header">
                 <img src={logo} alt="coding addict" className="logo" />
                 <button className="close-btn" onClick={closeSidebar}>
