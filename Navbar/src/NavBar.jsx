@@ -1,14 +1,15 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { links, social } from "./data";
 import logo from "./logo.svg";
 
 function NavBar() {
     const [showLinks, setShowLinks] = useState(false);
+    const linksContainerRef = useRef(null);
     const linksRef = useRef(null);
 
     const toggleLinks = () => {
-        console.log(linksRef.current.getBoundingClientRect());
+        // console.log(linksRef.current.getBoundingClientRect());
         setShowLinks(!showLinks);
     };
 
@@ -27,12 +28,28 @@ function NavBar() {
                         <FaBars />
                     </button>
                 </div>
-                <ul className="links" ref={linksRef} style={linkStyles}>
-                    {links.map((link) => {
-                        const { id, url, text } = link;
+                <div
+                    className="links-container"
+                    style={linkStyles}
+                    ref={linksContainerRef}
+                >
+                    <ul className="links" ref={linksRef}>
+                        {links.map((link) => {
+                            const { id, url, text } = link;
+                            return (
+                                <li key={id}>
+                                    <a href={url}>{text}</a>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+                <ul className="social-icons">
+                    {social.map((socialIcon) => {
+                        const { id, url, icon } = socialIcon;
                         return (
                             <li key={id}>
-                                <a href={url}>{text}</a>
+                                <a href={url}>{icon}</a>
                             </li>
                         );
                     })}
