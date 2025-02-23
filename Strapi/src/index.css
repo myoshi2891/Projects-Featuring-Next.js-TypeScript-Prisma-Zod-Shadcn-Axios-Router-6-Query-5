@@ -315,24 +315,99 @@ nav {
 	font-size: clamp(3rem, 5vw, 5rem);
 	margin-bottom: 1rem;
 	font-weight: 700;
-  line-height: 1.25;
+	line-height: 1.25;
 }
 
 .hero-center p {
-  line-height: 1.5;
+	line-height: 1.5;
 }
 
 @media screen and (min-width: 992px) {
-  .hero-center {
-    text-align: center;
-  }
+	.hero-center {
+		text-align: center;
+	}
 
-  .hero-center p {
-    max-width: 35em;
-    margin: 0 auto;
-  }
+	.hero-center p {
+		max-width: 35em;
+		margin: 0 auto;
+	}
 
-  .toggle-btn {
-    display: none;
-  }
+	.toggle-btn {
+		display: none;
+	}
+}
+
+/* 
+============= 
+Sidebar 
+=============== 
+*/
+
+.sidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: var(--white);
+  /* toggle */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.show-sidebar {
+  opacity: 1;
+  visibility: visible;
+  transition-property: opacity;
+  transition-duration: 1s;
+}
+
+.sidebar-container {
+	padding: 4rem 2rem;
+	position: relative;
+}
+
+.close-btn {
+	font-size: 2rem;
+	background: transparent;
+	border-color: transparent;
+	color: var(--primary-500);
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+  cursor: pointer;
+}
+
+.sidebar article {
+	margin-bottom: 2rem;
+}
+
+.sidebar h4 {
+	margin-bottom: 1rem;
+	color: var(--primary-700);
+}
+
+.sidebar-sublinks {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	row-gap: 0.5rem;
+}
+
+.sidebar-sublinks a {
+  display: block;
+  color: var(--grey-900);
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-sublinks svg {
+  color: var(--grey-500);
+}
+
+@media screen and (min-width: 992px) {
+	.display {
+		display: none;
+	}
 }
