@@ -426,13 +426,14 @@ Nav Links
   .nav-links {
     display: flex;
     justify-content: center;
-    border: 2px solid red;
+		align-self: stretch;
+
   }
 
   .nav-center {
+	align-self: stretch;
     display: grid;
     grid-template-columns: auto 1fr;
-    border: 2px solid black;
   }
 
   .nav-link {
@@ -444,7 +445,6 @@ Nav Links
     text-transform: capitalize;
     letter-spacing: var(--letterSpacing);
     cursor: pointer;
-    border: 2px solid yellow;
   }
 }
 
@@ -462,7 +462,7 @@ Submenu
 	.submenu {
 		display: block;
 		position: fixed;
-		top: 6rem;
+		top: 7rem;
 		left: 50%;
 		width: var(--fluid-width);
 		max-width: var(--max-width);
@@ -475,12 +475,14 @@ Submenu
 		visibility: hidden;
 		opacity: 0;
 		transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+		z-index: -1;
 	}
 
 	.show-submenu {
 		visibility: visible;
 		opacity: 1;
 		transform: rotateX(0) translateX(-50%);
+		z-index: 10;
 	}
 
 	.submenu h5 {
