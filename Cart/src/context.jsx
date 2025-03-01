@@ -1,10 +1,20 @@
 import { useContext, createContext, useReducer, useEffect } from "react";
 import reducer from "./reducer";
+import cartItems from "./data";
+import {
+	CLEAR_CART,
+	REMOVE_CART,
+	INCREASE,
+	DECREASE,
+	LOADING,
+	DISPLAY_ITEMS,
+} from "./actions";
+
 const AppContext = createContext();
 
 const initialState = {
 	loading: false,
-	cart: [],
+	cart: [...cartItems],
 };
 
 export const AppProvider = ({ children }) => {
