@@ -8,8 +8,6 @@ function App() {
 	if (loading) {
 		return (
 			<main>
-				<h2>Loading...</h2>
-				<p>Please wait a moment.</p>
 				<div className="loading" style={{ marginTop: "6rem" }} />
 			</main>
 		);
