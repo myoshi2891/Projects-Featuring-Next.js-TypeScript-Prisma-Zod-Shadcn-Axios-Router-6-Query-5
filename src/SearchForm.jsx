@@ -1,13 +1,15 @@
+import { useGlobalContext } from "./context";
 
 function SearchForm() {
-  const handleSubmit = (e) => {
+	const { setSearchTerm } = useGlobalContext();
+	const handleSubmit = (e) => {
 		e.preventDefault();
 		const searchValue = e.target.elements.search.value;
 		if (!searchValue) return;
-		console.log(searchValue);
-  };
+		setSearchTerm(searchValue);
+	};
 
-  return (
+	return (
 		<section>
 			<h1 className="title">unsplash images</h1>
 			<form className="search-form" onSubmit={handleSubmit}>
@@ -22,7 +24,7 @@ function SearchForm() {
 				</button>
 			</form>
 		</section>
-  );
+	);
 }
 
 export default SearchForm;
