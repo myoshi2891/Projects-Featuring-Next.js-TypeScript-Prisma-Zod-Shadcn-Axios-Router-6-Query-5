@@ -1,13 +1,11 @@
-import Gallery from "./Gallery";
-import SearchForm from "./SearchForm";
-import ThemeToggle from "./ThemeToggle";
+import Hero from "./Hero";
+import Projects from "./Projects";
 
 const App = () => {
 	return (
 		<main>
-			<ThemeToggle />
-			<SearchForm />
-			<Gallery />
+			<Hero />
+			<Projects />
 		</main>
 	);
 };
