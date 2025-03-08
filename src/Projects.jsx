@@ -1,6 +1,6 @@
-
+import "./fetchProjects";
 function Projects() {
-  return <h2>Projects</h2>;
+	return <h2>Projects</h2>;
 }
 
 export default Projects;
