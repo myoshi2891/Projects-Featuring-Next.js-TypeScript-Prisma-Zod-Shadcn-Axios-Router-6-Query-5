@@ -12,13 +12,31 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <HomeLayout />,
-	},
-	{
-		path: "/about",
-		element: <About />,
+		children: [
+			{
+				index: true,
+				element: <Landing />,
+			},
+			{
+				path: "about",
+				element: <About />,
+			},
+			{
+				path: "cocktail",
+				element: <Cocktail />,
+			},
+			{
+				path: "newsletter",
+				element: <Newsletter />,
+			},
+			{
+				path: "*",
+				element: <Error />,
+			},
+		],
 	},
 ]);
 const App = () => {
-	return <RouterProvider router={router}>mixmaster starter</RouterProvider>;
+	return <RouterProvider router={router} />;
 };
 export default App;
