@@ -20,24 +20,23 @@ const searchCocktailsQuery = (searchTerm) => {
 	};
 };
 
-export const loader = async ({ request }) => {
-	const url = new URL(request.url);
+export const loader =
+	(queryClient) =>
+	async ({ request }) => {
+		const url = new URL(request.url);
 
-	const searchTerm = url.searchParams.get("search") || "gin";
-	// const response = await axios.get(`${cocktailSearchUrl}${searchTerm}`);
-	return {
-		// drinks: response.data.drinks,
-		searchTerm,
+		const searchTerm = url.searchParams.get("search") || "gin";
+		await queryClient.ensureQueryData(searchCocktailsQuery(searchTerm));
+		// const response = await axios.get(`${cocktailSearchUrl}${searchTerm}`);
+		return {
+			// drinks: response.data.drinks,
+			searchTerm,
+		};
 	};
-};
 
 function Landing() {
 	const { searchTerm } = useLoaderData();
-	const { data: drinks, isLoading } = useQuery(
-		searchCocktailsQuery(searchTerm)
-	);
-
-	if (isLoading) return <h4>Loading...</h4>;
+	const { data: drinks } = useQuery(searchCocktailsQuery(searchTerm));
 
 	return (
 		<>
