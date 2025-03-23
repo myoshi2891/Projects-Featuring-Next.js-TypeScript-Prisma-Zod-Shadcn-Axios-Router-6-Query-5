@@ -1,1 +1,2 @@
-export {default as FormInput} from './FormInput.jsx';
+export { default as FormInput } from "./FormInput";
+export { default as SubmitBtn } from "./SubmitBtn";
