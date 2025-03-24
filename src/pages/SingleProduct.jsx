@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { formatPrice, customFetch } from "../utils";
+import { formatPrice, customFetch, generateAmountOptions } from "../utils";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -12,7 +12,7 @@ function SingleProduct() {
 	const { product } = useLoaderData();
 	const { image, title, price, description, colors, company } =
 		product.attributes;
-  	const dollarsAmount = formatPrice(price);
+	const dollarsAmount = formatPrice(price);
 	const [productColor, setProductColor] = useState(colors[0]);
 	const [amount, setAmount] = useState(1);
 
@@ -83,9 +83,7 @@ function SingleProduct() {
 								value={amount}
 								onChange={handleAmount}
 							>
-								<option value={1}>1</option>
-								<option value={2}>2</option>
-								<option value={3}>3</option>
+								{generateAmountOptions(20)}
 							</select>
 						</div>
 						{/* CART BTN */}
