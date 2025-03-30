@@ -6,12 +6,15 @@ import "./index.css";
 import { ToastContainer } from "react-toastify";
 import { store } from "./store.js";
 import { Provider } from "react-redux";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<Provider store={store}>
 			<App />
-			<ToastContainer position="top-center" />
+			<ErrorBoundary>
+				<ToastContainer position="top-center" />
+			</ErrorBoundary>
 		</Provider>
 	</StrictMode>
 );

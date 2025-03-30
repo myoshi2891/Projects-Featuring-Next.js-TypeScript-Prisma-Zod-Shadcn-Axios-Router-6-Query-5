@@ -1,6 +1,5 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { formatPrice, customFetch, generateAmountOptions } from "../utils";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../features/cart/cartSlice";
@@ -24,14 +23,14 @@ function SingleProduct() {
 
 	const cartProduct = {
 		cartID: product.id + productColor,
-		productId: product.id,
+		productID: product.id,
 		image,
 		title,
 		price,
 		company,
 		productColor,
+		amount,
 	};
-
 	const dispatch = useDispatch();
 
 	const addToCart = () => {
@@ -95,7 +94,7 @@ function SingleProduct() {
 								</h4>
 							</label>
 							<select
-								name="amount"
+								// name="amount"
 								id="amount"
 								className="select select-secondary select-bordered select-md"
 								value={amount}
