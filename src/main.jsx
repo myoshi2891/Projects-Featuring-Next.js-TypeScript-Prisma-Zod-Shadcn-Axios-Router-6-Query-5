@@ -14,9 +14,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<Provider store={store}>
 			<App />
-			<ErrorBoundary>
-				{/* <ToastContainer position="top-center" /> */}
-			</ErrorBoundary>
+			{/* <ErrorBoundary> */}
+			<ToastContainer position="top-center" autoClose={2000} />
+			{/* </ErrorBoundary> */}
 		</Provider>
 	</StrictMode>
 );
