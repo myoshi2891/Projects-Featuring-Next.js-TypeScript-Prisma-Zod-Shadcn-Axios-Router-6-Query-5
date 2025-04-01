@@ -29,7 +29,7 @@ function Cart() {
                         </Link>
                     ) : (
                         <Link
-                            to="/checkout"
+                            to="/login"
                             className="btn btn-primary btn-block mt-8"
                         >
                             please login
