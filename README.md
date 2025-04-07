@@ -1,1458 +1,1172 @@
-This GitHub project provides a comprehensive guide to integrating TypeScript with React. It covers initial setup using vite and TypeScript, demonstrates various React & TypeScript concepts through clear examples, and delves into more advanced topics. Key aspects include:
+## Node Version
 
-- Component Structure and TypeScript Integration: Explains how to correctly type React components, manage return types, and handle potential TypeScript errors.
-- Prop Handling and Typing: Offers insights on inline typing, using interfaces, and managing children props with TypeScript.
-- State Management: Teaches TypeScript type inference in state management, showcasing various useState examples.
-- Event Handling: Guides on typing events in React, such as form submissions and input changes.
-- Complex Component Structures: Discusses complex use cases like conditional prop rendering based on type values.
-- Context API with TypeScript: Provides a deep dive into using React's Context API in a TypeScript environment.
-- Reducers and Global State Management: Includes examples of setting up reducers with TypeScript and using them in React components.
-- Data Fetching: Demonstrates fetching data with TypeScript validation using tools like Zod, Axios, and React Query.
-- Redux Toolkit (RTK) Integration: Shows how to integrate Redux Toolkit in a TypeScript-React setup, including creating slices and using hooks.
-- Practical Application with Task Management: Concludes with a practical task management application, emphasizing localStorage use and handling task state.
+The minimum Node.js version has been bumped from 16.14 to 18.17, since 16.x has reached end-of-life.
 
-Each section is presented with relevant code snippets and explanations, making it an ideal resource for developers looking to deepen their understanding of TypeScript in React applications.
-
-## Setup
+## Create Next App
 
 ```sh
-npm create vite@latest react-typescript -- --template react-ts
+npx create-next-app@14 appName
 ```
 
-## Remove Boilerplate and Get Assets
+## Folder Structure
 
-# React & Typescript
+- app folder - where we will spend most of our time
+  - setup routes, layouts, loading states, etc
+- node_modules - project dependencies
+- public - static assets
+- .gitignore - sets which will be ignored by source control
+- bunch of config files (will discuss as we go)
+- in package.json look scripts
+- 'npm run dev' to spin up the project on http://localhost:3000
 
-- .tsx - file extension
-
-## 01 - Component Return
-
-- TypeScript infers JSX.Element, helps if no return
-
-```tsx
-// TypeScript infers JSX.Element
-// this will trigger error
-function Component() {}
-export default Component;
+```sh
+npm run dev
 ```
 
-- set function return type
+- in globals.css remove everything after directives
+- get a hold of the README.md
+
+## Home Page
+
+- page.tsx in the root of app folder
+- represents root of our application
+  '/' local domain or production domain
+- react component (server component)
+- bunch of css classes (will discuss Tailwind in few lectures)
+- export component as default
+- file name "page" has a special meaning
+- snippets extension
+
+  app/page.tsx
 
 ```tsx
-function Component(): JSX.Element | null | string {
-  return null;
-  return 'hello';
-  return <h2>hello from typescript</h2>;
-}
-export default Component;
-```
-
-## 02- Props
-
-```tsx
-function App() {
-  return (
-    <main>
-      <Component name='peter' id={123} />
-    </main>
-  );
-}
-
-export default App;
-```
-
-- inline types
-
-```tsx
-function Component({ name, id }: { name: string; id: number }) {
+const HomePage = () => {
   return (
     <div>
-      <h1>Name : {name}</h1>
-      <h1>ID : {id}</h1>
+      <h1 className='text-7xl'>HomePage</h1>
     </div>
   );
-}
-export default Component;
+};
+export default HomePage;
 ```
 
-- type or interface
-- props object or {}
+## Create Pages in Next.js
+
+- in the app folder create a folder with the page.js file
+  - about/page.js
+  - contact/page.js
+- can have .js .jsx .tsx extension
+
+app/about/page.tsx
 
 ```tsx
-type ComponentProps = {
-  name: string;
-  id: number;
-};
-
-function Component({ name, id }: ComponentProps) {
+const AboutPage = () => {
   return (
     <div>
-      <h1>Name : {name}</h1>
-      <h1>ID : {id}</h1>
+      <h1 className='text-7xl'>AboutPage</h1>
     </div>
   );
-}
-export default Component;
-```
-
-- children prop
-
-```tsx
-function App() {
-  return (
-    <main>
-      <Component name='peter' id={123}>
-        <h2>hello world</h2>
-      </Component>
-    </main>
-  );
-}
-
-export default App;
-```
-
-- React.ReactNode
-- PropsWithChildren
-
-```tsx
-import { type PropsWithChildren } from 'react';
-
-type ComponentProps = {
-  name: string;
-  id: number;
-  children: React.ReactNode;
 };
+export default AboutPage;
+```
 
-// type ComponentProps = PropsWithChildren<{
-//   name: string;
-//   id: number;
-// }>;
+## Link Component
 
-function Component({ name, id, children }: ComponentProps) {
+- navigate around the project
+- import Link from 'next/link'
+  home page
+
+```tsx
+import Link from 'next/link';
+const HomePage = () => {
   return (
     <div>
-      <h2>Name : {name}</h2>
-      <h2>ID : {id}</h2>
-      {children}
+      <h1 className='text-7xl'>HomePage</h1>
+      <Link href='/about' className='text-xl text-blue-500 inline-block mt-8'>
+        about page
+      </Link>
     </div>
   );
-}
-export default Component;
-```
-
-## 03 - State
-
-- typescript infers primitive types
-- by default [] is type never
-
-```tsx
-import { useState } from 'react';
-
-function Component() {
-  const [text, setText] = useState('shakeAndBake');
-  const [number, setNumber] = useState(1);
-  const [list, setList] = useState<string[]>([]);
-
-  return (
-    <div>
-      <h2 className='mb-1'>hello from typescript</h2>
-      <button
-        className='btn btn-center'
-        onClick={() => {
-          // setText(1);
-          // setNumber('hello');
-          // setList([1, 3]);
-          setList(['hello', 'world']);
-        }}
-      >
-        click me
-      </button>
-    </div>
-  );
-}
-export default Component;
-```
-
-```tsx
-import { useState } from 'react';
-
-type Link = {
-  id: number;
-  url: string;
-  text: string;
 };
-
-const navLinks: Link[] = [
-  {
-    id: 1,
-    url: 'https://reactjs.org',
-    text: 'react docs',
-  },
-  {
-    id: 2,
-    url: 'https://reactrouter.com',
-    text: 'react router docs',
-  },
-  {
-    id: 3,
-    url: 'https://reacttraining.com',
-    // remove text property to see the error
-    text: 'react training',
-  },
-];
-
-function Component() {
-  const [text, setText] = useState('shakeAndBake');
-  const [number, setNumber] = useState(1);
-  const [list, setList] = useState<string[]>([]);
-  const [links, setLinks] = useState<Link[]>(navLinks);
-  return (
-    <div>
-      <h2 className='mb-1'>hello from typescript</h2>
-      <button
-        className='btn btn-center'
-        onClick={() => {
-          // setText(1);
-          // setNumber('hello');
-          // setList([1, 3]);
-          // setList(['hello', 'world']);
-          // setLinks([...links, { id: 4, url: 'hello', someValue: 'hello' }])
-          setLinks([...links, { id: 4, url: 'hello', text: 'hello' }]);
-        }}
-      >
-        click me
-      </button>
-    </div>
-  );
-}
-export default Component;
+export default HomePage;
 ```
 
-```tsx
+## Nested Routes
 
+- app/info/contact/page.tsx
+- if no page.tsx in a segment will result in 404
+
+```tsx
+function ContactPage() {
+  return <h1 className='text-7xl'>ContactPage</h1>;
+}
+export default ContactPage;
 ```
 
-## 04 - Events
+## CSS and Tailwind
 
-- inline function infers object type
+- vanilla css in globals.css
+- [Tailwind](https://tailwindcss.com/)
 
-When you provide the exact HTML element type in the angle brackets (<>), like HTMLInputElement in your case, you're telling TypeScript exactly what kind of element the event is coming from. This helps TypeScript provide accurate suggestions and error checking based on the properties and methods that are specific to that kind of element. For example, an HTMLInputElement has properties like value and checked that other elements don't have. By specifying the exact element type, TypeScript can help you avoid mistakes and write safer code.
+## Layouts and Templates
 
-```tsx
-import { useState } from 'react';
+- layout.tsx
+- template.tsx
 
-function Component() {
-  const [text, setText] = useState('');
-  const [email, setEmail] = useState('');
+  Layout is a component which wraps other pages and layouts. Allow to share UI. Even when the route changes, layout DOES NOT re-render. Can fetch data but can't pass it down to children. Templates are the same but they re-render.
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setEmail(e.target.value);
-  };
-
-  return (
-    <section>
-      <h2>events example</h2>
-      <form className='form'>
-        <input
-          className='form-input mb-1'
-          type='text'
-          name='text'
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-
-        <input
-          type='email'
-          className='form-input mb-1'
-          value={email}
-          onChange={handleChange}
-        />
-        <button type='submit' className='btn btn-block'>
-          submit
-        </button>
-      </form>
-    </section>
-  );
-}
-export default Component;
-```
+- the top-most layout is called the Root Layout. This required layout is shared across all pages in an application. Root layouts must contain html and body tags.
+- any route segment can optionally define its own Layout. These layouts will be shared across all pages in that segment.
+- layouts in a route are nested by default. Each parent layout wraps child layouts below it using the React children prop.
 
 ```tsx
-import { useState } from 'react';
+import './globals.css';
 
-type Person = {
-  name: string;
-};
-
-function Component() {
-  const [text, setText] = useState('');
-  const [email, setEmail] = useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setEmail(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // const formData = new FormData(e.currentTarget);
-    const formData = new FormData(e.target as HTMLFormElement);
-    // const data = Object.fromEntries(formData);
-    const text = formData.get('text') as string;
-    const person: Person = { name: text };
-  };
-
-  return (
-    <section>
-      <h2>events example</h2>
-      <form onSubmit={handleSubmit} className='form'>
-        <input
-          className='form-input mb-1'
-          type='text'
-          name='text'
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-
-        <input
-          type='email'
-          className='form-input mb-1'
-          value={email}
-          onChange={handleChange}
-          name='email'
-        />
-        <button type='submit' className='btn btn-block'>
-          submit
-        </button>
-      </form>
-    </section>
-  );
-}
-export default Component;
-```
-
-The FormData API is a web technology that allows developers to easily construct and manage sets of key/value pairs representing form fields and their values. It is commonly used to send form data, including files, from a client (such as a web browser) to a server in a format that can be easily processed. The FormData API provides a way to programmatically create and manipulate form data, making it useful for AJAX requests and handling file uploads in web applications.
-
-## 05 - Challenge - Profile Card
-
-- initial approach (won't work as expected)
-
-```tsx
-type ProfileCardProps = {
-  type: 'basic' | 'advanced';
-  name: string;
-  email?: string;
-};
-
-function Component(props: ProfileCardProps) {
-  const { type, name, email } = props;
-
-  const alertType = type === 'basic' ? 'success' : 'danger';
-  const className = `alert alert-${alertType}`;
-  return (
-    <article className={className}>
-      <h2>user : {name}</h2>
-      {email && <h2>email : {email}</h2>}
-    </article>
-  );
-}
-export default Component;
-```
-
-- another approach (won't work as expected)
-
-```tsx
-type ProfileCardProps = {
-  type: 'basic' | 'advanced';
-  name: string;
-  email?: string;
-};
-
-function Component(props: ProfileCardProps) {
-  const { type, name, email } = props;
-
-  const alertType = type === 'basic' ? 'success' : 'danger';
-  const className = `alert alert-${alertType}`;
-  return (
-    <article className={className}>
-      <h2>user : {name}</h2>
-      {type === advanced ? <h2>email : {email}</h2> : null}
-    </article>
-  );
-}
-export default Component;
-```
-
-- final approach
-
-```tsx
-type BasicProfileCardProps = {
-  type: 'basic';
-  name: string;
-};
-
-type AdvancedProfileCardProps = {
-  type: 'advanced';
-  name: string;
-  email: string;
-};
-type ProfileCardProps = BasicProfileCardProps | AdvancedProfileCardProps;
-function Component(props: ProfileCardProps) {
-  const { type, name } = props;
-  if (type === 'basic')
-    return (
-      <article className='alert alert-success'>
-        <h2>user : {name}</h2>
-      </article>
-    );
-
-  return (
-    <article className='alert alert-danger'>
-      <h2>user : {name}</h2>
-      <h2>email : {props.email}</h2>
-    </article>
-  );
-}
-export default Component;
-```
-
-## 06 - Context
-
-- basic context
-
-```tsx
-import { createContext, useContext } from 'react';
-
-const ThemeProviderContext = createContext<{ name: string } | undefined>(
-  undefined
-);
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <ThemeProviderContext.Provider value={{ name: 'susan' }}>
-      {children}
-    </ThemeProviderContext.Provider>
-  );
-}
-
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider');
-
-  return context;
-};
-```
-
-basic-index.tsx
-
-```tsx
-import { useTheme, ThemeProvider } from './basic-context';
-
-function ParentComponent() {
-  return (
-    <ThemeProvider>
-      <Component />
-    </ThemeProvider>
-  );
-  return <Component />;
-}
-
-function Component() {
-  const context = useTheme();
-  console.log(context);
-
-  return (
-    <div>
-      <h2>random component</h2>
-    </div>
-  );
-}
-export default ParentComponent;
-```
-
-context.tsx
-
-```tsx
-import { createContext, useState, useContext } from 'react';
-
-type Theme = 'light' | 'dark' | 'system';
-
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState | undefined>(
-  undefined
-);
-
-type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-};
-
-export function ThemeProvider({
+export default function RootLayout({
   children,
-  defaultTheme = 'system',
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <ThemeProviderContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeProviderContext.Provider>
+    <html lang='en'>
+      <body>
+        <nav>hello there</nav>
+        {children}
+      </body>
+    </html>
   );
 }
+```
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+## Challenge - Navbar
 
-  if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider');
+- create components/Navbar.tsx
+- render in layout.tsx
 
-  return context;
+```tsx
+import Link from 'next/link';
+
+function Navbar() {
+  return (
+    <nav className='max-w-3xl mx-auto py-4 flex gap-x-4'>
+      <Link href='/'>Home</Link>
+      <Link href='/counter'>Counter</Link>
+      <Link href='/tours'>Tours</Link>
+      <Link href='/actions'>Actions</Link>
+    </nav>
+  );
+}
+export default Navbar;
+```
+
+```tsx
+import Navbar from '@/components/Navbar';
+
+return (
+  <html lang='en'>
+    <body className={inter.className}>
+      <Navbar />
+      <main className='max-w-3xl mx-auto py-10'>{children}</main>
+    </body>
+  </html>
+);
+```
+
+## Fonts - Google Fonts
+
+Automatically self-host any Google Font. Fonts are included in the deployment and served from the same domain as your deployment. No requests are sent to Google by the browser.
+
+```tsx
+import './globals.css';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang='en'>
+      <body className={inter.className}>
+        <nav>hello there</nav>
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+## Metadata
+
+Next.js has a Metadata API that can be used to define your application metadata (e.g. meta and link tags inside your HTML head element) for improved SEO and web shareability.To define static metadata, export a Metadata object from a layout.tsx or page.tsx file.
+
+```tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Next.js Project',
+  description: 'A Next.js project with TypeScript and TailwindCSS.',
+  keywords: 'Next.js, Typescript, TailwindCSS',
 };
 ```
 
-Component.tsx
+## Server Components VS Client Components
+
+- [Server Components](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
+- [Client Components](https://nextjs.org/docs/app/building-your-application/rendering/client-components)
+
+- BY DEFAULT, NEXT.JS USES SERVER COMPONENTS !!!!
+- To use Client Components, you can add the React "use client" directive
+
+### Server Components
+
+Benefits :
+
+- data fetching
+- security
+- caching
+- bundle size
+
+Data Fetching: Server Components allow you to move data fetching to the server, closer to your data source. This can improve performance by reducing time it takes to fetch data needed for rendering, and the amount of requests the client needs to make.
+Security: Server Components allow you to keep sensitive data and logic on the server, such as tokens and API keys, without the risk of exposing them to the client.
+Caching: By rendering on the server, the result can be cached and reused on subsequent requests and across users. This can improve performance and reduce cost by reducing the amount of rendering and data fetching done on each request.
+Bundle Sizes: Server Components allow you to keep large dependencies that previously would impact the client JavaScript bundle size on the server. This is beneficial for users with slower internet or less powerful devices, as the client does not have to download, parse and execute any JavaScript for Server Components.
+Initial Page Load and First Contentful Paint (FCP): On the server, we can generate HTML to allow users to view the page immediately, without waiting for the client to download, parse and execute the JavaScript needed to render the page.
+Search Engine Optimization and Social Network Shareability: The rendered HTML can be used by search engine bots to index your pages and social network bots to generate social card previews for your pages.
+Streaming: Server Components allow you to split the rendering work into chunks and stream them to the client as they become ready. This allows the user to see parts of the page earlier without having to wait for the entire page to be rendered on the server.
+
+### Client Components
+
+Benefits :
+
+- Interactivity: Client Components can use state, effects, and event listeners, meaning they can provide immediate feedback to the user and update the UI.
+- Browser APIs: Client Components have access to browser APIs, like geolocation or localStorage, allowing you to build UI for specific use cases.
+
+### Challenge
+
+- create counter page and setup basic counter
 
 ```tsx
-import { useTheme, ThemeProvider } from './context';
+'use client';
+import { useState } from 'react';
 
-function ParentComponent() {
+function Counter() {
+  const [count, setCount] = useState(0);
   return (
-    <ThemeProvider>
-      <Component />
-    </ThemeProvider>
-  );
-  return <Component />;
-}
-
-function Component() {
-  const context = useTheme();
-  console.log(context);
-
-  return (
-    <div>
-      <h2>random component</h2>
+    <div className='flex flex-col items-center w-[100px]'>
+      <p className='text-5xl font-bold'>{count}</p>
       <button
-        onClick={() => {
-          if (context.theme === 'dark') {
-            context.setTheme('system');
-            return;
-          }
-          context.setTheme('dark');
-        }}
-        className='btn btn-center'
+        onClick={() => setCount(count + 1)}
+        className='bg-blue-500 rounded-md text-white px-4 py-2 mt-4'
       >
-        toggle theme
+        Increment
       </button>
     </div>
   );
 }
-export default ParentComponent;
+export default Counter;
 ```
 
-## 07 - Reducers
+## Challenge - Refactor
 
-- starter code
+- create Counter component and import in CounterPage
+- now page can be server component
 
 ```tsx
-function Component() {
-  return (
-    <div>
-      <h2>Count: 0</h2>
-      <h2>Status: Active</h2>
+import Counter from '@/components/Counter';
 
-      <div className='btn-container'>
-        <button onClick={() => console.log('increment')} className='btn'>
-          Increment
-        </button>
-        <button onClick={() => console.log('decrement')} className='btn'>
-          Decrement
-        </button>
-        <button onClick={() => console.log('reset')} className='btn'>
-          Reset
-        </button>
-      </div>
-      <div className='btn-container'>
-        <button
-          onClick={() => console.log('set status to active')}
-          className='btn'
-        >
-          Set Status to Active
-        </button>
-        <button
-          className='btn'
-          onClick={() => console.log('set status to inactive')}
-        >
-          Set Status to Inactive
-        </button>
-      </div>
-    </div>
-  );
-}
-export default Component;
-```
-
-- reducer setup
-
-reducer.ts
-
-```ts
-export type CounterState = {
-  count: number;
-  status: string;
-};
-
-export const initialState: CounterState = {
-  count: 0,
-  status: 'Pending...',
-};
-
-export const counterReducer = (
-  state: CounterState,
-  action: any
-): CounterState => {
-  return state;
-};
-```
-
-index.tsx
-
-```tsx
-import { useReducer } from 'react';
-import { counterReducer, initialState } from './reducer';
-
-function Component() {
-  const [state, dispatch] = useReducer(counterReducer, initialState);
-  return (
-    <div>
-      <h2>Count: {state.count}</h2>
-      <h2>Status: {state.status}</h2>
-    </div>
-  );
-}
-```
-
-- setup count action
-
-reducer
-
-```ts
-type UpdateCountAction = {
-  type: 'increment' | 'decrement' | 'reset';
-};
-
-// Extend the union type for all possible actions
-type CounterAction = UpdateCountAction;
-
-export const counterReducer = (
-  state: CounterState,
-  action: CounterAction
-): CounterState => {
-  switch (action.type) {
-    case 'increment':
-      return { ...state, count: state.count + 1 };
-    case 'decrement':
-      return { ...state, count: state.count - 1 };
-    case 'reset':
-      return { ...state, count: 0 };
-    default:
-      return state;
-  }
-};
-```
-
-index.tsx
-
-```tsx
-<div className='btn-container'>
-  <button onClick={() => dispatch({ type: 'increment' })} className='btn'>
-    Increment
-  </button>
-  <button onClick={() => dispatch({ type: 'decrement' })} className='btn'>
-    Decrement
-  </button>
-  <button onClick={() => dispatch({ type: 'reset' })} className='btn'>
-    Reset
-  </button>
-</div>
-```
-
-- setup active action
-
-reducer.ts
-
-```ts
-export type CounterState = {
-  count: number;
-  status: string;
-};
-
-export const initialState: CounterState = {
-  count: 0,
-  status: 'Pending...',
-};
-
-type UpdateCountAction = {
-  type: 'increment' | 'decrement' | 'reset';
-};
-type SetStatusAction = {
-  type: 'setStatus';
-  payload: 'active' | 'inactive';
-};
-
-// Extend the union type for all possible actions
-type CounterAction = UpdateCountAction | SetStatusAction;
-
-export const counterReducer = (
-  state: CounterState,
-  action: CounterAction
-): CounterState => {
-  switch (action.type) {
-    case 'increment':
-      return { ...state, count: state.count + 1 };
-    case 'decrement':
-      return { ...state, count: state.count - 1 };
-    case 'reset':
-      return { ...state, count: 0 };
-    case 'setStatus':
-      return { ...state, status: action.payload };
-    default:
-      const unhandledActionType: never = action;
-      throw new Error(
-        `Unexpected action type: ${unhandledActionType}. Please double check the counter reducer.`
-      );
-  }
-};
-```
-
-```tsx
-import { useReducer } from 'react';
-import { counterReducer, initialState } from './reducer';
-
-function Component() {
-  const [state, dispatch] = useReducer(counterReducer, initialState);
-  return (
-    <div>
-      <h2>Count: {state.count}</h2>
-      <h2>Status: {state.status}</h2>
-
-      <div className='btn-container'>
-        <button onClick={() => dispatch({ type: 'increment' })} className='btn'>
-          Increment
-        </button>
-        <button onClick={() => dispatch({ type: 'decrement' })} className='btn'>
-          Decrement
-        </button>
-        <button onClick={() => dispatch({ type: 'reset' })} className='btn'>
-          Reset
-        </button>
-      </div>
-      <div className='btn-container'>
-        <button
-          onClick={() => dispatch({ type: 'setStatus', payload: 'active' })}
-          className='btn'
-        >
-          Set Status to Active
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch({ type: 'setStatus', payload: 'inactive' })}
-        >
-          Set Status to Inactive
-        </button>
-      </div>
-    </div>
-  );
-}
-export default Component;
-```
-
-## 08 - Fetch Data
-
-- reference data fetching in typescript-tutorial
-
-[Zod](https://zod.dev/)
-[React Query](https://tanstack.com/query/latest/docs/framework/react/overview)
-[Axios](https://axios-http.com/docs/intro)
-
-```sh
-npm i zod axios @tanstack/react-query
-
-```
-
-```tsx
-import { useState, useEffect } from 'react';
-const url = 'https://www.course-api.com/react-tours-project';
-
-function Component() {
-  // tours
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch tours...`);
-        }
-
-        const rawData = await response.json();
-        console.log(rawData);
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'there was an error...';
-        setIsError(message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return <h3>Loading...</h3>;
-  }
-
-  if (isError) {
-    return <h3>Error: {isError}</h3>;
-  }
-
-  return (
-    <div>
-      <h2 className='mb-1'>Tours</h2>
-    </div>
-  );
-}
-export default Component;
-```
-
-types.ts
-
-```ts
-import { z } from 'zod';
-
-export const tourSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  image: z.string(),
-  info: z.string(),
-  price: z.string(),
-  // someValue: z.string(),
-});
-
-export type Tour = z.infer<typeof tourSchema>;
-```
-
-index-fetch.tsx
-
-```tsx
-import { useState, useEffect } from 'react';
-const url = 'https://www.course-api.com/react-tours-project';
-import { type Tour, tourSchema } from './types';
-function Component() {
-  // tours
-  const [tours, setTours] = useState<Tour[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch tours...`);
-        }
-        const rawData: Tour[] = await response.json();
-        const result = tourSchema.array().safeParse(rawData);
-
-        if (!result.success) {
-          console.log(result.error.message);
-          throw new Error(`Failed to parse tours`);
-        }
-        setTours(result.data);
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'there was an error...';
-        setIsError(message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return <h3>Loading...</h3>;
-  }
-  if (isError) {
-    return <h3>Error {isError}</h3>;
-  }
-
-  return (
-    <div>
-      <h2 className='mb-1'>Tours</h2>
-      {tours.map((tour) => {
-        return (
-          <p key={tour.id} className='mb-1'>
-            {tour.name}
-          </p>
-        );
-      })}
-    </div>
-  );
-}
-export default Component;
-```
-
-- React Query
-
-types.ts
-
-```ts
-import { z } from 'zod';
-import axios from 'axios';
-const url = 'https://course-api.com/react-tours-project';
-
-export const tourSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  image: z.string(),
-  info: z.string(),
-  price: z.string(),
-  // someValue: z.string(),
-});
-
-export type Tour = z.infer<typeof tourSchema>;
-
-export const fetchTours = async (): Promise<Tour[]> => {
-  const response = await axios.get<Tour[]>(url);
-  const result = tourSchema.array().safeParse(response.data);
-  if (!result.success) {
-    throw new Error('Parsing failed');
-  }
-  return result.data;
-};
-```
-
-main.tsx
-
-```tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <QueryClientProvider client={queryClient}>
-    <App />
-  </QueryClientProvider>
-);
-```
-
-index.tsx
-
-```tsx
-import { fetchTours } from './types';
-import { useQuery } from '@tanstack/react-query';
-
-function Component() {
-  const {
-    isPending,
-    isError,
-    error,
-    data: tours,
-  } = useQuery({
-    queryKey: ['tours'],
-    queryFn: fetchTours,
-  });
-
-  if (isPending) return <h2>Loading...</h2>;
-  if (isError) return <h2>Error : {error.message} </h2>;
-  return (
-    <div>
-      <h2 className='mb-1'>Tours </h2>
-      {tours.map((tour) => {
-        return (
-          <p className='mb-1' key={tour.id}>
-            {tour.name}
-          </p>
-        );
-      })}
-    </div>
-  );
-}
-
-export default Component;
-```
-
-## 09 - RTK
-
-```tsx
-function Component() {
-  return (
-    <div>
-      <h2>Count: 0</h2>
-      <h2>Status: Pending</h2>
-
-      <div className='btn-container'>
-        <button onClick={() => console.log('increment')} className='btn'>
-          Increment
-        </button>
-        <button onClick={() => console.log('decrement')} className='btn'>
-          Decrement
-        </button>
-        <button onClick={() => console.log('reset')} className='btn'>
-          Reset
-        </button>
-      </div>
-      <div className='btn-container'>
-        <button onClick={() => console.log('active')} className='btn'>
-          Set Status to Active
-        </button>
-        <button className='btn' onClick={() => console.log('inactive')}>
-          Set Status to Inactive
-        </button>
-      </div>
-    </div>
-  );
-}
-export default Component;
-```
-
-- counterSlice.ts
-
-```ts
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-
-type CounterStatus = 'active' | 'inactive' | 'pending...';
-
-type CounterState = {
-  count: number;
-  status: CounterStatus;
-};
-
-const initialState: CounterState = {
-  count: 0,
-  status: 'pending...',
-};
-
-export const counterSlice = createSlice({
-  name: 'counter',
-  // `createSlice` will infer the state type from the `initialState` argument
-  initialState,
-  reducers: {
-    increment: (state) => {
-      state.count += 1;
-    },
-    decrement: (state) => {
-      state.count -= 1;
-    },
-    reset: (state) => {
-      state.count = 0;
-    },
-    setStatus: (state, action: PayloadAction<CounterStatus>) => {
-      state.status = action.payload;
-    },
-  },
-});
-
-export const { increment, decrement, reset, setStatus } = counterSlice.actions;
-
-export default counterSlice.reducer;
-```
-
-store.ts
-
-```ts
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './starter/09-rtk/counterSlice';
-// ...
-
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-```
-
-type RootState represents the type of the state stored in your Redux store. ReturnType is a utility type provided by TypeScript that can get the return type of a function. store.getState is a function that returns the current state stored in the Redux store. So ReturnType<typeof store.getState> is the type of the state returned by store.getState, which is the type of the state in your Redux store.
-
-type AppDispatch represents the type of the dispatch function in your Redux store. store.dispatch is the function you use to dispatch actions in Redux. typeof store.dispatch gets the type of this function. So AppDispatch is the type of the dispatch function in your Redux store.
-
-hooks.ts
-
-```ts
-import { useDispatch, useSelector } from 'react-redux';
-import type { TypedUseSelectorHook } from 'react-redux';
-import type { RootState, AppDispatch } from './store';
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-```
-
-export const useAppDispatch: () => AppDispatch = useDispatch;
-
-This line is creating a custom hook called useAppDispatch that wraps around the useDispatch hook from Redux. The useDispatch hook returns the dispatch function from the Redux store. By creating a custom hook useAppDispatch, you can ensure that the dispatch function is correctly typed with your application's specific dispatch type (AppDispatch).
-
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-
-This line is creating a custom hook called useAppSelector that wraps around the useSelector hook from Redux. The useSelector hook allows you to extract data from the Redux store state. By creating a custom hook useAppSelector, you can ensure that the selector functions passed to this hook are correctly typed with your application's specific state type (RootState).
-
-main.tsx
-
-```tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-import { store } from './store';
-import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
-```
-
-index.tsx
-
-```tsx
-import { useAppSelector, useAppDispatch } from '../../hooks';
-import { decrement, increment, reset, setStatus } from './counterSlice';
-function Component() {
-  const { count, status } = useAppSelector((state) => state.counter);
-  const dispatch = useAppDispatch();
-  return (
-    <div>
-      <h2>Count: {count}</h2>
-      <h2>Status: {status}</h2>
-
-      <div className='btn-container'>
-        <button onClick={() => dispatch(increment())} className='btn'>
-          Increment
-        </button>
-        <button onClick={() => dispatch(decrement())} className='btn'>
-          Decrement
-        </button>
-        <button onClick={() => dispatch(reset())} className='btn'>
-          Reset
-        </button>
-      </div>
-      <div className='btn-container'>
-        <button onClick={() => dispatch(setStatus('active'))} className='btn'>
-          Set Status to Active
-        </button>
-        <button className='btn' onClick={() => dispatch(setStatus('inactive'))}>
-          Set Status to Inactive
-        </button>
-      </div>
-    </div>
-  );
-}
-export default Component;
-```
-
-## Challenge - Task Application
-
-### Setup
-
-- Create the following in './starter/10-tasks':
-  - `Form.tsx` (with a basic return)
-  - `List.tsx` (with a basic return)
-  - `types.ts`
-    - Export a type named 'Task' with the following properties:
-      - `id: string`
-      - `description: string`
-      - `isCompleted: boolean`
-- In `index.tsx`, import 'Task' type and set up a state value of type 'Task[]'.
-- Also, import and render 'Form' and 'List' in `index.tsx`.
-
-### Form
-
-- Create a form with a single input.
-- Set up a controlled input.
-- Set up a form submit handler and ensure it checks for empty values.
-
-### Add Task
-
-- In `index.tsx`, create an 'addTask' function that adds a new task to the list.
-- Pass 'addTask' as a prop to 'Form'.
-- In 'Form', set up the correct type and invoke 'addTask' if the input has a value.
-
-### Toggle Task
-
-- In `index.tsx`, create a 'toggleTask' function that toggles 'isCompleted'.
-- Pass the function and list as props to 'List'.
-- In `List.tsx`:
-  - Set up the correct type for props.
-  - Render the list.
-  - Set up a checkbox in each item and add an 'onChange' handler.
-  - Invoke the 'toggleTask' functionality.
-
-### Local Storage
-
-- Incorporate LocalStorage into the application.
-
-## 10 - Tasks
-
-- create Form, List components
-
-types.ts
-
-```ts
-export type Task = {
-  id: string;
-  description: string;
-  isCompleted: boolean;
-};
-```
-
-index.tsx
-
-```tsx
-import { useEffect, useState } from 'react';
-import Form from './Form';
-import List from './List';
-import { type Task } from './types';
-
-function Component() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
+function CounterPage() {
   return (
     <section>
-      <Form />
-      <List />
+      <h1 className='text-6xl mb-16'>Page Content</h1>
+      <Counter />
     </section>
   );
 }
-export default Component;
+export default CounterPage;
 ```
 
-Form.tsx
+## Fetch Data in Server Components
+
+- create tours/page.tsx
+- just add async and start using await 🚀🚀🚀
+- the same for db
+- Next.tsx extends the native Web fetch() API to allow each request on the server to set its own persistent caching semantics.
 
 ```tsx
-import { useState } from 'react';
-import { type Task } from './types';
+const url = 'https://www.course-api.com/react-tours-project';
 
-function Form() {
-  const [text, setText] = useState('');
+type Tour = {
+  id: string;
+  name: string;
+  info: string;
+  image: string;
+  price: string;
+};
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!text) {
-      alert('please enter a task');
-      return;
-    }
-    //  add task
-    setText('');
-  };
+async function ToursPage() {
+  const response = await fetch(url);
+  const data: Tour[] = await response.json();
+  console.log(data);
   return (
-    <form className='form task-form' onSubmit={handleSubmit}>
-      <input
-        type='text'
-        className='form-input'
-        value={text}
-        onChange={(e) => {
-          setText(e.target.value);
-        }}
-      />
-      <button type='submit' className='btn'>
-        add task
-      </button>
-    </form>
+    <section>
+      <h1 className='text-3xl mb-4'>Tours</h1>
+
+      {data.map((tour) => {
+        return <h2 key={tour.id}>{tour.name}</h2>;
+      })}
+    </section>
   );
 }
-export default Form;
+export default ToursPage;
 ```
 
-index.tsx
+## Refactor and Delay
+
+- Refresh browser on another page, navigate to tours, observe delay.
 
 ```tsx
-import { useEffect, useState } from 'react';
-import Form from './Form';
-import List from './List';
-import { type Task } from './types';
+const fetchTours = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const response = await fetch(url);
+  const data: Tour[] = await response.json();
+  return data;
+};
 
-function Component() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+async function ToursPage() {
+  const data = await fetchTours();
+}
+```
 
-  const addTask = (task: Task) => {
-    setTasks([...tasks, task]);
-  };
+## Loading Component
 
+The special file loading.js helps you create meaningful Loading UI with React Suspense. With this convention, you can show an instant loading state from the server while the content of a route segment loads. The new content is automatically swapped in once rendering is complete.
+
+- tours/loading.tsx
+
+```tsx
+'use client';
+const loading = () => {
+  return <span className='text-xl capitalize'>loading tours...</span>;
+};
+export default loading;
+```
+
+## Error Component
+
+The error.tsx file convention allows you to gracefully handle unexpected runtime errors in nested routes.
+
+- tours/error.js
+- 'use client'
+
+```js
+'use client';
+const error = () => {
+  return <div>there was an error...</div>;
+};
+export default error;
+```
+
+## Nested Layouts
+
+- create app/tours/layout.tsx
+- UI will be applied to app/tours - segment
+- don't forget about the "children"
+- we can fetch data in the layout but...
+  at the moment can't pass data down to children (pages) 😞
+
+  layout.tsx
+
+```js
+function ToursLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <Form addTask={addTask} />
-      <List />
+      <header className='py-2 w-1/2 bg-slate-500 rounded mb-4'>
+        <h1 className='text-3xl text-white text-center'>Nested Layout</h1>
+      </header>
+      {children}
     </div>
   );
 }
-export default Component;
+export default ToursLayout;
 ```
 
-Form.tsx
+## Dynamic Routes
 
-```tsx
-import { useState } from 'react';
-import { type Task } from './types';
+- app/tours/[id]/page.tsx
 
-type FormProps = {
-  addTask: (task: Task) => void;
-};
+```js
+const page = ({ params }: { params: { id: string } }) => {
+  console.log(params);
 
-function Form({ addTask }: FormProps) {
-  const [text, setText] = useState('');
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!text) {
-      alert('please enter a task');
-      return;
-    }
-    addTask({
-      id: new Date().getTime().toString(),
-      description: text,
-      isCompleted: false,
-    });
-    setText('');
-  };
   return (
-    <form className='form task-form' onSubmit={handleSubmit}>
-      <input
-        type='text'
-        className='form-input'
-        value={text}
-        onChange={(e) => {
-          setText(e.target.value);
-        }}
-      />
-      <button type='submit' className='btn'>
-        add task
-      </button>
-    </form>
-  );
-}
-export default Form;
-```
-
-index.tsx
-
-```tsx
-const toggleTask = ({ id }: { id: string }) => {
-  setTasks(
-    tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, isCompleted: !task.isCompleted };
-      }
-      return task;
-    })
+    <div>
+      <h1 className='text-4xl'>ID : {params.id}</h1>
+    </div>
   );
 };
+export default page;
+```
+
+## Challenge - Setup Links
+
+```tsx
 return (
-  <div>
-    <Form addTask={addTask} />
-    <List tasks={tasks} toggleTask={toggleTask} />
+  <section>
+    <h1 className='text-3xl mb-4'>Tours</h1>
+
+    {data.map((tour) => {
+      return (
+        <Link
+          key={tour.id}
+          href={`/tours/${tour.id}`}
+          className='hover:text-blue-500'
+        >
+          <h2>{tour.name}</h2>
+        </Link>
+      );
+    })}
+  </section>
+);
+```
+
+## Next Image Component
+
+- get random image from pexels site
+  [Random Image](https://www.pexels.com/photo/assorted-map-pieces-2859169/)
+
+The Next.js Image component extends the HTML <img> element with features for automatic image optimization:
+
+- Size Optimization: Automatically serve correctly sized images for each device, using modern image formats like WebP and AVIF.
+- Visual Stability: Prevent layout shift automatically when images are loading.
+- Faster Page Loads: Images are only loaded when they enter the viewport using native browser lazy loading, with optional blur-up placeholders.
+- Asset Flexibility: On-demand image resizing, even for images stored on remote servers
+
+- disable cache
+- width and height
+
+- priority property to prioritize the image for loading
+  When true, the image will be considered high priority and preload.
+
+```tsx
+import mapsImg from '@/images/maps.jpg';
+import Image from 'next/image';
+const url = 'https://www.course-api.com/images/tours/tour-1.jpeg';
+
+const page = async ({ params }: { params: { id: string } }) => {
+  return (
+    <div>
+      <h1 className='text-4xl'>ID : {params.id}</h1>
+      <section className='flex gap-x-4 mt-4'>
+        <div>
+          <Image
+            src={mapsImg}
+            alt='maps'
+            width={192}
+            height={192}
+            className='w-48 h-48 object-cover rounded'
+          />
+          <h2>local image</h2>
+        </div>
+      </section>
+    </div>
+  );
+};
+export default page;
+```
+
+## Remote Images
+
+- To use a remote image, the src property should be a URL string.
+
+- Since Next.js does not have access to remote files during the build process, you'll need to provide the width, height and optional blurDataURL props manually.
+
+- The width and height attributes are used to infer the correct aspect ratio of image and avoid layout shift from the image loading in. The width and height do not determine the rendered size of the image file.
+
+```tsx
+import mapsImg from '@/images/maps.jpg';
+import Image from 'next/image';
+const url = 'https://www.course-api.com/images/tours/tour-1.jpeg';
+
+const page = async ({ params }: { params: { id: string } }) => {
+  return (
+    <div>
+      <h1 className='text-4xl'>ID : {params.id}</h1>
+      <section className='flex gap-x-4 mt-4'>
+        <div>
+          <Image
+            src={mapsImg}
+            alt='maps'
+            width={192}
+            height={192}
+            className='w-48 h-48 object-cover rounded'
+          />
+          <h2>local image</h2>
+        </div>
+        <div>
+          <Image
+            src={url}
+            alt='tour'
+            width={192}
+            height={192}
+            priority
+            className='w-48 h-48 object-cover rounded'
+          />
+          <h2>remote image</h2>
+        </div>
+      </section>
+    </div>
+  );
+};
+export default page;
+```
+
+```mjs
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.course-api.com',
+        port: '',
+        pathname: '/images/**',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+- To safely allow optimizing images, define a list of supported URL patterns in next.config.mjs. Be as specific as possible to prevent malicious usage.
+
+- restart dev server
+
+## Responsive Images
+
+- The fill prop allows your image to be sized by its parent element
+- sizes property helps the browser select the most appropriate image size to load based on the user's device and screen size, improving website performance and user experience.
+
+A string that provides information about how wide the image will be at different breakpoints. The value of sizes will greatly affect performance for images using fill or which are styled to have a responsive size.
+
+The sizes property serves two important purposes related to image performance:
+
+First, the value of sizes is used by the browser to determine which size of the image to download, from next/image's automatically-generated source set. When the browser chooses, it does not yet know the size of the image on the page, so it selects an image that is the same size or larger than the viewport. The sizes property allows you to tell the browser that the image will actually be smaller than full screen. If you don't specify a sizes value in an image with the fill property, a default value of 100vw (full screen width) is used.
+
+Second, the sizes property configures how next/image automatically generates an image source set. If no sizes value is present, a small source set is generated, suitable for a fixed-size image. If sizes is defined, a large source set is generated, suitable for a responsive image. If the sizes property includes sizes such as 50vw, which represent a percentage of the viewport width, then the source set is trimmed to not include any values which are too small to ever be necessary.
+
+tours.tsx
+
+```js
+return (
+  <div className='grid md:grid-cols-2 gap-8'>
+    {data.map((tour) => {
+      return (
+        <Link
+          key={tour.id}
+          href={`/tours/${tour.id}`}
+          className='hover:text-blue-500'
+        >
+          <div className='relative h-48 mb-2'>
+            <Image
+              src={tour.image}
+              alt={tour.name}
+              fill
+              sizes='33vw'
+              // sizes='(max-width:768px) 100vw,(max-width:1200px) 50vw, 33vw'
+              priority
+              className='object-cover rounded'
+            />
+          </div>
+          <h2>{tour.name}</h2>
+        </Link>
+      );
+    })}
   </div>
 );
 ```
 
-List.tsx
+## More Routing
 
-```tsx
-import { type Task } from './types';
+- Private Folders
+  \_folder
+- Route Groups
+  (dashboard)
+- Dynamic Routes
 
-type ListProps = {
-  tasks: Task[];
-  toggleTask: ({ id }: { id: string }) => void;
+  - [...folder] - Catch-all route segment
+  - [[...folder]] Optional catch-all route segment (used by Clerk)
+
+- create test folder app/\_css
+- create app/(dashboard)/auth
+
+  - the url is just '/auth'
+
+- create app/(dashboard)/auth/[sign-in]
+
+```ts
+const SignInPage = ({ params }: { params: { 'sign-in': string } }) => {
+  console.log(params);
+  return <div>SignInPage</div>;
 };
-
-const List = ({ tasks, toggleTask }: ListProps) => {
-  return (
-    <ul className='list'>
-      {tasks.map((task) => {
-        return (
-          <li key={task.id}>
-            <p className='task-text'>{task.description}</p>
-            <input
-              type='checkbox'
-              checked={task.isCompleted}
-              onChange={() => {
-                toggleTask({ id: task.id });
-              }}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-export default List;
+export default SignInPage;
 ```
 
-index.tsx
+- create app/(dashboard)/auth/[...sign-in]
+- create app/(dashboard)/auth/[[...sign-in]]
+
+```ts
+const SignInPage = ({ params }: { params: { 'sign-in': string[] } }) => {
+  console.log(params);
+  console.log(params['sign-in'][1]);
+  return <div>SignInPage :{params['sign-in'][1]}</div>;
+};
+export default SignInPage;
+```
+
+## Server Actions
+
+- asynchronous server functions that can be called directly from your components.
+
+- typical setup for server state mutations (create, update, delete)
+
+  - endpoint on the server (api route on Next.js)
+  - make request from the front-end
+    - setup form, handle submission etc
+
+- Next.js server actions allow you to mutate server state directly from within a React component by defining server-side logic alongside client-side interactions.
+
+Rules :
+
+- must be async
+- add 'use server' in function body (only in RSC)
+- can use in RCC but only as import
+
+RSC - React Server Component
+RCC - React Client Component
 
 ```tsx
-import { useEffect, useState } from 'react';
-import Form from './Form';
-import List from './List';
-import { type Task } from './types';
+export default function ServerComponent() {
+  async function myAction(formData) {
+    'use server';
+    // access input values with formData
+    // formData.get('name')
+    // mutate data (server)
+    // revalidate cache
+  }
 
-// Load tasks from localStorage
-function loadTasks(): Task[] {
-  const storedTasks = localStorage.getItem('tasks');
-  return storedTasks ? JSON.parse(storedTasks) : [];
+  return <form action={myAction}>...</form>;
 }
+```
 
-function updateStorage(tasks: Task[]): void {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+- or setup in a separate file ('use server' at the top)
+  - can use in both (RSC and RCC)
+
+utils/actions.js
+
+```tsx
+'use server';
+
+export async function myAction() {
+  // ...
 }
+```
 
-function Component() {
-  const [tasks, setTasks] = useState<Task[]>(() => loadTasks());
+```tsx
+'use client';
 
-  const addTask = (task: Task) => {
-    setTasks([...tasks, task]);
-  };
+import { myAction } from './actions';
 
-  const toggleTask = ({ id }: { id: string }) => {
-    setTasks(
-      tasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, isCompleted: !task.isCompleted };
-        }
-        return task;
-      })
-    );
-  };
-  useEffect(() => {
-    updateStorage(tasks);
-  }, [tasks]);
+export default function ClientComponent() {
   return (
-    <div>
-      <Form addTask={addTask} />
-      <List tasks={tasks} toggleTask={toggleTask} />
+    <form action={myAction}>
+      <button type='submit'>Add to Cart</button>
+    </form>
+  );
+}
+```
+
+## Actions Page - Setup
+
+- create Form and UsersList in components
+
+```tsx
+import Form from '@/components/Form';
+import UsersList from '@/components/UsersList';
+
+function ActionsPage() {
+  return (
+    <>
+      <Form />
+      <UsersList />
+    </>
+  );
+}
+export default ActionsPage;
+```
+
+## Form - Setup
+
+```tsx
+const createUser = async () => {
+  'use server';
+  console.log('creating user....');
+};
+
+function Form() {
+  return (
+    <form action={createUser} className={formStyle}>
+      <h2 className='text-2xl capitalize mb-4'>create user</h2>
+      <input
+        type='text'
+        name='firstName'
+        required
+        className={inputStyle}
+        defaultValue='peter'
+      />
+      <input
+        type='text'
+        name='lastName'
+        required
+        className={inputStyle}
+        defaultValue='smith'
+      />
+      <button type='submit' className={btnStyle}>
+        submit
+      </button>
+    </form>
+  );
+}
+export default Form;
+
+const formStyle = 'max-w-lg flex flex-col gap-y-4  shadow rounded p-8';
+const inputStyle = 'border shadow rounded py-2 px-3 text-gray-700';
+const btnStyle =
+  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded capitalize';
+```
+
+## Actions File
+
+- create utils/actions.ts
+- make "Form" Client Component ('use client')
+- import in Form
+
+```ts
+'use server';
+
+export const createUser = async () => {
+  console.log('creating user....');
+};
+```
+
+```tsx
+'use client';
+
+import { createUser } from '@/utils/actions';
+```
+
+## FormData
+
+```ts
+export const createUser = async (formData: FormData) => {
+  const firstName = formData.get('firstName') as string;
+  const lastName = formData.get('lastName') as string;
+  const rawData = Object.fromEntries(formData);
+  console.log(rawData);
+  console.log({ firstName, lastName });
+};
+```
+
+## Save User
+
+- just as an example
+- create "users.json" (root !!!)
+- won't work on vercel (deployment)
+
+```ts
+'use server';
+
+import { readFile, writeFile } from 'fs/promises';
+
+type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
+export const createUser = async (formData: FormData) => {
+  const firstName = formData.get('firstName') as string;
+  const lastName = formData.get('lastName') as string;
+  const newUser: User = { firstName, lastName, id: Date.now().toString() };
+  await saveUser(newUser);
+};
+
+export const fetchUsers = async (): Promise<User[]> => {
+  const result = await readFile('users.json', { encoding: 'utf8' });
+  const users = result ? JSON.parse(result) : [];
+  return users;
+};
+
+const saveUser = async (user: User) => {
+  const users = await fetchUsers();
+  users.push(user);
+  await writeFile('users.json', JSON.stringify(users));
+};
+```
+
+## UsersList
+
+```tsx
+import { fetchUsers } from '@/utils/actions';
+async function UsersList() {
+  const users = await fetchUsers();
+  return (
+    <div className='mt-4'>
+      {users.length ? (
+        <div>
+          {users.map((user) => (
+            <h4 key={user.id} className='capitalize text-lg'>
+              {user.firstName} {user.lastName}
+            </h4>
+          ))}
+        </div>
+      ) : (
+        <p>No users found...</p>
+      )}
     </div>
   );
 }
-export default Component;
+export default UsersList;
 ```
+
+## RevalidatePath
+
+```ts
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
+export const createUser = async (formData: FormData) => {
+  //...
+  revalidatePath('/actions');
+};
+```
+
+- if the data is displayed in a different page
+
+```ts
+export const createUser = async (formData: FormData) => {
+  //...
+  redirect('/');
+};
+```
+
+- don't "redirect" place inside "try" block
+
+```tsx
+try {
+  await saveUser(newUser);
+  // will trigger error
+  redirect('/');
+} catch (error) {
+  console.error(error);
+}
+```
+
+## Pending State
+
+- make sure Form is Client Component
+- in createUser switch back to revalidatePath(/actions)
+
+[React Docs - useFormStatus](https://react.dev/reference/react-dom/hooks/useFormStatus)
+
+- useFormStatus()
+- The useFormStatus Hook provides status information of the last form submission.
+
+- The useFormStatus Hook must be called from a component that is rendered inside a <form>.
+- useFormStatus will only return status information for a parent <form>.
+  It will not return status information for any <form> rendered in that same component or children components.
+
+  ```tsx
+  import { useFormStatus, useFormState } from 'react-dom';
+
+  const SubmitButton = () => {
+    const { pending } = useFormStatus();
+    return (
+      <button type='submit' className={btnStyle} disabled={pending}>
+        {pending ? 'submitting...' : 'submit'}
+      </button>
+    );
+  };
+  ```
+
+## Result
+
+[React Docs - useFormState](https://react.dev/reference/react-dom/hooks/useFormState)
+
+- useFormState()
+- a Hook that allows you to update state based on the result of a form action.
+
+```tsx
+const [message, formAction] = useFormState(createUser, null);
+return (
+  <form action={formAction} className={formStyle}>
+    {message && <p>{message}</p>}
+    ...
+  </form>
+);
+```
+
+```ts
+export const createUser = async (prevState: any, formData: FormData) => {
+  // current state of the form
+  console.log(prevState);
+
+  const firstName = formData.get('firstName') as string;
+  const lastName = formData.get('lastName') as string;
+  const newUser: User = { firstName, lastName, id: Date.now().toString() };
+
+  try {
+    await saveUser(newUser);
+    revalidatePath('/actions');
+    // throw Error();
+    return 'user created successfully...';
+  } catch (error) {
+    console.error(error);
+    return 'failed to create user...';
+  }
+};
+```
+
+## Delete User
+
+- create components/DeleteButton
+- refactor UsersList
+
+```tsx
+function DeleteButton({ id }: { id: string }) {
+  return (
+    <form>
+      <button
+        type='submit'
+        className='bg-red-500 text-white text-xs rounded p-2'
+      >
+        delete
+      </button>
+    </form>
+  );
+}
+export default DeleteButton;
+```
+
+```tsx
+import { fetchUsers } from '@/utils/actions';
+import DeleteButton from './DeleteButton';
+async function UsersList() {
+  const users = await fetchUsers();
+  return (
+    <div className='mt-4'>
+      {users.length ? (
+        <div className='max-w-lg'>
+          {users.map((user) => (
+            <h4
+              key={user.id}
+              className='capitalize text-lg flex justify-between items-center mb-2'
+            >
+              {user.firstName} {user.lastName}
+              <DeleteButton id={user.id} />
+            </h4>
+          ))}
+        </div>
+      ) : (
+        <p>No users found...</p>
+      )}
+    </div>
+  );
+}
+export default UsersList;
+```
+
+## Delete Action
+
+```ts
+export const deleteUser = async (formData: FormData) => {
+  const id = formData.get('id') as string;
+  const users = await fetchUsers();
+  const updatedUsers = users.filter((user: User) => user.id !== id);
+  await writeFile('users.json', JSON.stringify(updatedUsers));
+  revalidatePath('/actions');
+};
+```
+
+```tsx
+import { deleteUser } from '@/utils/actions';
+
+function DeleteButton({ id }: { id: string }) {
+  return (
+    <form action={deleteUser}>
+      <input type='hidden' name='id' value={id} />
+      <button
+        type='submit'
+        className='bg-red-500 text-white text-xs rounded p-2'
+      >
+        delete
+      </button>
+    </form>
+  );
+}
+export default DeleteButton;
+```
+
+```tsx
+import { deleteUser, removeUser } from '@/utils/actions';
+
+function DeleteButton({ id }: { id: string }) {
+  const removeUserWithId = removeUser.bind(null, id);
+  return (
+    <form action={removeUserWithId}>
+      <input type='hidden' name='name' value='shakeAndBake' />
+      <button
+        type='submit'
+        className='bg-red-500 text-white text-xs rounded p-2'
+      >
+        delete
+      </button>
+    </form>
+  );
+}
+export default DeleteButton;
+```
+
+## Bind Option
+
+- An alternative to passing arguments as hidden input fields in the form (e.g. `<input type="hidden" name="userId" value={userId} />`) is to use the bind option. With this approach, the value is not part of the rendered HTML and will not be encoded.
+
+- .bind works in both Server and Client Components. It also supports progressive enhancement.
+
+```ts
+export const removeUser = async (id: string, formData: FormData) => {
+  const name = formData.get('name') as string;
+  console.log(name);
+
+  const users = await fetchUsers();
+  const updatedUsers = users.filter((user) => user.id !== id);
+  await writeFile('users.json', JSON.stringify(updatedUsers));
+  revalidatePath('/actions');
+};
+```
+
+## Route Handlers
+
+- install Thunder Client
+
+Route Handlers allow you to create custom request handlers for a given route using the Web Request and Response APIs.
+
+- in app create folder "api"
+- in there create folder "users" with route.ts file
+
+The following HTTP methods are supported: GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS. If an unsupported method is called, Next.js will return a 405 Method Not Allowed response.
+
+In addition to supporting native Request and Response. Next.js extends them with NextRequest and NextResponse to provide convenient helpers for advanced use cases.
+
+app/api/users/route.ts
+
+```ts
+// the following HTTP methods are supported: GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS. If an unsupported method is called, Next.js will return a 405 Method Not Allowed response.
+
+import { NextRequest, NextResponse } from 'next/server';
+import { fetchUsers, saveUser } from '@/utils/actions';
+
+export const GET = async () => {
+  const users = await fetchUsers();
+  return Response.json({ users });
+};
+
+export const POST = async (request: Request) => {
+  const user = await request.json();
+  const newUser = { ...user, id: Date.now().toString() };
+  await saveUser(newUser);
+  return Response.json({ msg: 'user created' });
+};
+```
+
+```ts
+import { fetchUsers, saveUser } from '@/utils/actions';
+
+export const GET = async (request: Request) => {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  console.log(id);
+
+  const users = await fetchUsers();
+  return Response.json({ users });
+};
+```
+
+```ts
+import { fetchUsers, saveUser } from '@/utils/actions';
+import { NextRequest, NextResponse } from 'next/server';
+
+export const GET = async (request: NextRequest) => {
+  console.log(request.url);
+  console.log(request.nextUrl.searchParams.get('id'));
+
+  const users = await fetchUsers();
+  return NextResponse.redirect(new URL('/', request.url));
+};
+```
+
+The URL constructor takes two arguments: url and base. If the url is a relative URL, then base is required. If url is an absolute URL, then base is ignored.
+
+Here, '/' is the url and request.url is the base.
+
+This means it's creating a new URL object that represents the root of the URL contained in request.url.
+
+For example, if request.url is 'http://example.com/path/to/resource', the new URL object would represent 'http://example.com/'.
+
+## Middleware
+
+[Docs](https://nextjs.org/docs/app/building-your-application/routing/middleware)
+
+Middleware in Next.js is a piece of code that allows you to perform actions before a request is completed and modify the response accordingly.
+
+- create middleware.ts in the root
+- by default will be invoked for every route in your project
+
+```ts
+export function middleware(request) {
+  return Response.json({ msg: 'hello there' });
+}
+
+export const config = {
+  matcher: '/about',
+};
+```
+
+```ts
+import { NextResponse } from 'next/server';
+
+// This function can be marked `async` if using `await` inside
+export function middleware(request) {
+  return NextResponse.redirect(new URL('/', request.url));
+}
+
+// See "Matching Paths" below to learn more
+export const config = {
+  matcher: ['/about/:path*', '/tours/:path*'],
+};
+```
+
+## Local Build
+
+- cleanup middleware
+- fix css in UsersList.tsx
+- remove all users from 'users.json'
+- 'npm run build' followed by 'npm start'
+
+## Caching
+
+- [Vercel Video](https://www.youtube.com/watch?v=VBlSe8tvg4U)
+- [Docs](https://nextjs.org/docs/app/building-your-application/caching)
