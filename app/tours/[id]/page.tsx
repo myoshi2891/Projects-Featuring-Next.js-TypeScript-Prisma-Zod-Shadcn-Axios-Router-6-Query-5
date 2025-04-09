@@ -18,13 +18,13 @@ function page({ params }: { params: { id: string } }) {
 						height={192}
 					/>
 					<h2 className="text-3xl">Tour Details</h2>
-					<p>
+					{/* <p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 						Sed quis malesuada neque, at posuere justo. Sed vel
 						libero vel felis ullamcorper vulputate. Sed vel libero
 						vel felis ullamcorper vulputate. Sed vel libero vel
 						felis ullamcorper vulputate.
-					</p>
+					</p> */}
 				</div>
 				{/* remote image */}
 				<div>
