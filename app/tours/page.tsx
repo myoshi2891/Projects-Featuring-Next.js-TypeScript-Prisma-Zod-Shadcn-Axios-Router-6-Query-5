@@ -12,6 +12,10 @@ type Tour = {
 };
 
 const fetchTours = async () => {
+	console.log("###################");
+	console.log("Fetching data from API...");
+	console.log("###################");
+	
 	await new Promise((resolve) => setTimeout(resolve, 3000));
 	const response = await fetch(url);
 	const data: Tour[] = await response.json();
