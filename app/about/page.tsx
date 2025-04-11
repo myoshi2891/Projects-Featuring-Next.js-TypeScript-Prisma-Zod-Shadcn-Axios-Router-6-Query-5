@@ -1,6 +1,6 @@
 
 function AboutPage() {
-  return <div className="text-7xl">About Page</div>;
+  return <div>AboutPage</div>;
 }
 
 export default AboutPage;
