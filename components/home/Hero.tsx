@@ -11,9 +11,9 @@ function Hero() {
 				</h1>
 				<p className="mt-8 max-w-xl text-lg leading-8 text-muted-foreground">
 					From the crowded streets of New York to the quaint cottages
-					of Vienna, there's a place where people can find what
-					they're looking for. Our online store is here to help you
-					find it.
+					of Vienna, there&apos;s a place where people can find what
+					they&apos;re looking for. Our online store is here to help
+					you find it.
 				</p>
 				<Button asChild size="lg" className="mt-10">
 					<Link href="/products">Our Products</Link>
