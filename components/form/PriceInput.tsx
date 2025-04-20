@@ -1,5 +1,7 @@
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+// import { Prisma } from "@prisma/client";
+// Prisma.ProductScalarFieldEnum.price
 
 const name = "price";
 type FormInputNumberProps = {
