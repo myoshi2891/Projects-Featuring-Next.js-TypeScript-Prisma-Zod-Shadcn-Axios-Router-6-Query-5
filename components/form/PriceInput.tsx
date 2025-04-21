@@ -15,6 +15,7 @@ function PriceInput({ defaultValue = 0 }: FormInputNumberProps) {
 			</Label>
 			<Input
 				id={name}
+				name={name}
 				type="number"
 				min={0}
 				defaultValue={defaultValue || 100}
