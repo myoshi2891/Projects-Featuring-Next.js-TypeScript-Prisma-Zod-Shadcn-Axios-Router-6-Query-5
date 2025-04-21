@@ -2,7 +2,7 @@
 
 import { useFormState } from "react-dom";
 import { useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { actionFunction } from "@/utils/types";
 
 const initialState = {
@@ -19,6 +19,7 @@ function FormContainer({
 	const [state, formAction] = useFormState(action, initialState);
 	const { toast } = useToast();
 
+	// console.log(toast({ description: state.message }));
 	useEffect(() => {
 		if (state.message) {
 			toast({ description: state.message });
