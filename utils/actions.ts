@@ -5,6 +5,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { imageSchema, productSchema, validateWithZodSchema } from "./schemas";
 import { uploadImage } from "./supabase";
+import { revalidatePath } from "next/cache";
 
 const getAuthUser = async () => {
 	const user = await currentUser();
@@ -98,4 +99,18 @@ export const fetchAdminProducts = async () => {
 		},
 	});
 	return products;
+};
+
+export const deleteProductAction = async (prevState: { productId: string }) => {
+	const { productId } = prevState;
+	await getAdminUser();
+	try {
+		await db.product.delete({
+			where: { id: productId },
+		});
+		revalidatePath("/admin/products");
+		return { message: "Product deleted successfully" };
+	} catch (error) {
+		return renderError(error);
+	}
 };

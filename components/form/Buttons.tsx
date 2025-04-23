@@ -41,3 +41,35 @@ export function SubmitButton({
 		</Button>
 	);
 }
+
+type actionType = "delete" | "edit";
+export const IconButton = ({ actionType }: { actionType: actionType }) => {
+	const { pending } = useFormStatus();
+
+	const renderIcon = () => {
+		switch (actionType) {
+			case "edit":
+				return <LuPen />;
+			case "delete":
+				return <LuTrash2 />;
+			default:
+				const never: never = actionType;
+				throw new Error(`Unexpected action type: ${never}`);
+		}
+	};
+
+	return (
+		<Button
+			type="submit"
+			size="icon"
+			variant="link"
+			className="p-2 cursor-pointer"
+		>
+			{pending ? (
+				<ReloadIcon className="h-4 w-4 animate-spin" />
+			) : (
+				renderIcon()
+			)}
+		</Button>
+	);
+};
