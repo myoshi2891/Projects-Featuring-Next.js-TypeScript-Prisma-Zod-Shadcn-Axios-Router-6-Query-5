@@ -357,16 +357,75 @@ export const fetchCartItems = async () => {
 	return cart?.numItemsInCart || 0;
 };
 
-const fetchProduct = async () => {};
+const fetchProduct = async (productId: string) => {
+	const product = await db.product.findUnique({
+		where: {
+			id: productId,
+		},
+	});
+	if (!product) {
+		throw new Error(
+			"Product not found. Please check the product ID and try again. If the issue persists, contact support."
+		);
+	}
 
-export const fetchOrCreateCart = async () => {};
+	return product;
+};
+
+const includeProductClause = {
+	cartItems: {
+		include: {
+			product: true,
+		},
+	},
+};
+
+export const fetchOrCreateCart = async ({
+	userId,
+	errorOnFailure = false,
+}: {
+	userId: string;
+	errorOnFailure?: boolean;
+}) => {
+	let cart = await db.cart.findFirst({
+		where: {
+			clerkId: userId,
+		},
+		include: includeProductClause,
+	});
+
+	if (!cart && errorOnFailure) {
+		throw new Error(
+			"Failed to find or create cart for user. Please try again."
+		);
+	}
+	if (!cart) {
+		cart = await db.cart.create({
+			data: {
+				clerkId: userId,
+			},
+			include: includeProductClause,
+		});
+	}
+	return cart;
+};
 
 const updateOrCreateCartItem = async () => {};
 
 export const updateCart = async () => {};
 
 export const addToCartAction = async (prevState: any, formData: FormData) => {
-	return { message: "Added to cart successfully" };
+	const user = await getAuthUser();
+
+	try {
+		const productId = formData.get("productId") as string;
+		const amount = Number(formData.get("amount"));
+		await fetchProduct(productId);
+		const cart = await fetchOrCreateCart({ userId: user.id });
+	} catch (error) {
+		return renderError(error);
+	}
+	redirect("/cart");
 };
 
 export const removeCartItemAction = async () => {};
